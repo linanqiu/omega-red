@@ -1,5 +1,5 @@
 (function () {
-  var reddit = require('redwrap');
+  var reddit = require('redcarb');
   var BASE_URL = 'http://www.reddit.com/user/USERNAME/about.json';
 
   var request = require('request');

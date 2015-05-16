@@ -27,7 +27,6 @@
   });
 
   var natural = require('natural');
-  // too slow
   var tokenizer = new natural.TreebankWordTokenizer();
 
 
@@ -40,10 +39,20 @@
 
   module.exports = {
     writeThread: function (entry) {
+      if (entry.text === null) {
+        entry.text = '';
+      }
+      if (entry.title === null) {
+        entry.title = '';
+      }
       entry.text = sanitize(entry.text);
+      entry.title = sanitize(entry.title);
       stringifierThreads.write(entry);
     },
     writeComment: function (entry) {
+      if (entry.text === undefined) {
+        entry.text = '';
+      }
       entry.text = sanitize(entry.text);
       stringifierComments.write(entry);
     }

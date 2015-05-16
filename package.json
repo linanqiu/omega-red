@@ -1,0 +1,27 @@
+{
+  "name": "omega-red",
+  "version": "1.0.0",
+  "description": "Aggressive reddit scraper",
+  "main": "omega-red.js",
+  "dependencies": {
+    "async": "^0.9.0",
+    "csv-stringify": "^0.0.6",
+    "natural": "^0.2.1",
+    "redcarb": "^0.0.1",
+    "request": "^2.55.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linanqiu/omega-red.git"
+  },
+  "author": "Linan Qiu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/linanqiu/omega-red/issues"
+  },
+  "homepage": "https://github.com/linanqiu/omega-red#readme"
+}

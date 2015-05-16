@@ -7,13 +7,17 @@
 
   var async = require('async');
 
+  // exponential backoff
+  var waittime = 500;
+
   verifier(config, function () {
     var metaArray = Object.keys(config);
-    async.each(metaArray, function (meta, metacallback) {
+    async.eachSeries(metaArray, function (meta, metacallback) {
       var subArray = Object.keys(config[meta]);
 
       async.each(subArray, function (sub, subcallback) {
-        scrapeSubreddit(meta, sub, config[meta][sub], subcallback);
+        console.log('\tStart sub:\t%s/%s', meta, sub);
+        scrapeSubreddit(meta, sub, config[meta][sub], '', subcallback);
       }, function (err) {
         if (err) {
           console.error('Error in meta: %s', meta);
@@ -32,83 +36,104 @@
     });
   });
 
-  function scrapeSubreddit(meta, sub, count, subcallback) {
-    console.log('\tStart sub:\t%s/%s', meta, sub);
+  function scrapeSubreddit(meta, sub, count, after, subcallback) {
+    var reddit = require('redcarb');
+    if (after === null) {
+      after = '';
+    }
 
-    var entries = [];
+    if (count > 0) {
+      reddit.r(sub).after(after).limit(100, function (err, data, res) {
+        if (err) {
+          // probably because rate limited
+          // start exponential backoffing
+          waittime = Math.min(parseInt(waittime * Math.random() * 5), 30000);
+          console.error('\tRate limited. Waiting %s ms', waittime);
+          setTimeout(function () {
+            scrapeSubreddit(meta, sub, count, after, subcallback);
+          }, waittime);
+        } else {
+          // reset backoff
+          waittime = 500;
 
-    var reddit = require('redwrap');
-    reddit.r(sub).all(count, function (res) {
-      res.on('data', function (data, res) {
-        var threads = data.data.children;
-        threads.forEach(function (thread) {
+          var threads = data.data.children;
+          threads.forEach(function (thread) {
+            var entry = {
+              text: thread.data.selftext,
+              title: thread.data.title,
+              url: thread.data.url,
+              id: thread.data.id,
+              subreddit: sub,
+              meta: meta,
+              time: thread.data.created_utc,
+              author: thread.data.author,
+              ups: thread.data.ups,
+              downs: thread.data.downs,
+              authorlinkkarma: 0,
+              authorcommentkarma: 0,
+              authorisgold: false
+            };
+
+            scrapeThread(meta, sub, entry.id);
+
+            after = entry.id;
+
+            author(entry, function (err) {
+              if (!err) {
+                writer.writeThread(entry);
+              }
+            });
+          });
+          // console.log(sub + ' ' + count);
+          scrapeSubreddit(meta, sub, count - 100, after, subcallback);
+        }
+      });
+    } else {
+      console.log('\tSub complete:\t%s/%s', meta, sub);
+      subcallback();
+    }
+  }
+
+  function scrapeThread(meta, sub, id) {
+    var reddit = require('redcarb');
+    reddit.comments(sub, id, function (err, data, res) {
+      if (err) {
+        // probably because rate limited
+        // start exponential backoffing
+        waittime = Math.min(parseInt(waittime * Math.random() * 5), 30000);
+        console.error('\tRate limited. Waiting %s ms', waittime);
+        setTimeout(function () {
+          scrapeThread(meta, sub, id);
+        }, waittime);
+      } else {
+        //reset exponential backoff
+        waittime = 500;
+
+        var comments = data;
+        if (comments !== null && comments[0].data.children !== null) {
+          var op = comments[0].data.children[0];
           var entry = {
-            text: thread.data.selftext,
-            title: thread.data.title,
-            url: thread.data.url,
-            id: thread.data.id,
+            text: op.data.selftext,
+            id: op.data.id,
             subreddit: sub,
             meta: meta,
-            time: thread.data.created_utc,
-            author: thread.data.author,
-            ups: thread.data.ups,
-            downs: thread.data.downs,
+            time: op.data.created_utc,
+            author: op.data.author,
+            ups: op.data.ups,
+            downs: op.data.downs,
             authorlinkkarma: 0,
             authorcommentkarma: 0,
             authorisgold: false
           };
 
-          entries.push(entry);
-        });
-      });
+          author(entry, function (err) {
+            if (!err) {
+              writer.writeComment(entry);
+            }
+          });
 
-      res.on('error', function (e) {
-        console.log(e);
-        // subcallback(true);
-      });
-
-      res.on('end', function () {
-        // entries.forEach(function(entry) {
-        //   author(entry, function(err) {
-        //     if(!err) {
-        //       writer.writeThread(entry);
-        //     }
-        //   });
-        // });
-        subcallback();
-        console.log('\tSub complete:\t%s/%s', meta, sub);
-      });
-    });
-  }
-
-  function scrapeThread(meta, sub, id, threadCallback) {
-    var reddit = require('redwrap');
-    reddit.comments(sub, id, function (err, data, res) {
-      var comments = data;
-      if (comments !== null && comments[0].data.children !== null) {
-
-        var op = comments[0].data.children[0];
-        var entry = {
-          text: op.data.selftext,
-          id: op.data.id,
-          subreddit: sub,
-          meta: meta,
-          time: op.data.created_utc,
-          author: op.data.author,
-          ups: op.data.ups,
-          downs: op.data.downs,
-          authorlinkkarma: 0,
-          authorcommentkarma: 0,
-          authorisgold: false
-        };
-
-        author(entry, function (err) {
-          if (!err) {
-            writer.writeComment(entry);
-          }
-        });
-
-        recursiveComments(meta, sub, id, comments[1].data.children);
+          recursiveComments(meta, sub, id, comments[1].data.children);
+        }
       }
     });
   }
@@ -129,13 +154,11 @@
         authorisgold: false
       };
 
-      if (tempEntry.text !== undefined) {
-        author(tempEntry, function (err) {
-          if (!err) {
-            writer.writeComment(tempEntry);
-          }
-        });
-      }
+      author(tempEntry, function (err) {
+        if (!err) {
+          writer.writeComment(tempEntry);
+        }
+      });
 
       if (tempComment.data.replies && tempComment.data.replies.children) {
         recursiveComments(meta, sub, id, tempComment.data.replies.children);
