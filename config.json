@@ -1,106 +1,106 @@
 {
   "law": {
-    "law": 200,
-    "legaled": 200,
-    "cyberlaws": 200,
-    "isthislegal": 200,
-    "legalnews": 200,
-    "lsat": 200
+    "law": 2000,
+    "legaled": 2000,
+    "cyberlaws": 2000,
+    "isthislegal": 2000,
+    "legalnews": 2000,
+    "lsat": 2000
   },
   "technology": {
-    "technology": 200,
-    "android": 200,
-    "bitcoin": 200,
-    "programming": 200,
-    "apple": 200
+    "technology": 2000,
+    "android": 2000,
+    "bitcoin": 2000,
+    "programming": 2000,
+    "apple": 2000
   },
   "sports": {
-    "nba": 200,
-    "soccer": 200,
-    "hockey": 200,
-    "nfl": 200,
-    "formula1": 200,
-    "baseball": 200,
-    "mma": 200,
-    "squaredcircle": 200
+    "nba": 2000,
+    "soccer": 2000,
+    "hockey": 2000,
+    "nfl": 2000,
+    "formula1": 2000,
+    "baseball": 2000,
+    "mma": 2000,
+    "squaredcircle": 2000
   },
   "racegenderidentity": {
-    "atheism": 200,
-    "twoxchromosomes": 200,
-    "mensrights": 200,
-    "gaybros": 200,
-    "lgbt": 200
+    "atheism": 2000,
+    "twoxchromosomes": 2000,
+    "mensrights": 2000,
+    "gaybros": 2000,
+    "lgbt": 2000
   },
   "places": {
-    "canada": 200,
-    "toronto": 200,
-    "australia": 200,
-    "unitedkingdom": 200
+    "canada": 2000,
+    "toronto": 2000,
+    "australia": 2000,
+    "unitedkingdom": 2000
   },
   "news": {
-    "politics": 200,
-    "worldnews": 200,
-    "news": 200,
-    "conspiracy": 200,
-    "libertarian": 200,
-    "truereddit": 200,
-    "conservative": 200,
-    "offbeat": 200
+    "politics": 2000,
+    "worldnews": 2000,
+    "news": 2000,
+    "conspiracy": 2000,
+    "libertarian": 2000,
+    "truereddit": 2000,
+    "conservative": 2000,
+    "offbeat": 2000
   },
   "lifestyle": {
-    "food": 200,
-    "guns": 200,
-    "motorcycles": 200,
-    "sex": 200,
-    "progresspics": 200,
-    "lifehacks": 200,
-    "frugal": 200,
-    "drunk": 200
+    "food": 2000,
+    "guns": 2000,
+    "motorcycles": 2000,
+    "sex": 2000,
+    "progresspics": 2000,
+    "lifehacks": 2000,
+    "frugal": 2000,
+    "drunk": 2000
   },
   "learning": {
-    "todayilearned": 200,
-    "science": 200,
-    "askscience": 200,
-    "space": 200,
-    "askhistorians": 200,
-    "youshouldknow": 200,
-    "explainlikeimfive": 200
+    "todayilearned": 2000,
+    "science": 2000,
+    "askscience": 2000,
+    "space": 2000,
+    "askhistorians": 2000,
+    "youshouldknow": 2000,
+    "explainlikeimfive": 2000
   },
   "humor": {
-    "funny": 200,
-    "adviceanimals": 200,
-    "imgoingtohellforthis": 200,
-    "facepalm": 200,
-    "jokes": 200,
-    "circlejerk": 200
+    "funny": 2000,
+    "adviceanimals": 2000,
+    "imgoingtohellforthis": 2000,
+    "facepalm": 2000,
+    "jokes": 2000,
+    "circlejerk": 2000
   },
   "entertainment": {
-    "music": 200,
-    "movies": 200,
-    "harrypotter": 200,
-    "starwars": 200,
-    "starwars": 200,
-    "anime": 200,
-    "comicbooks": 200
+    "music": 2000,
+    "movies": 2000,
+    "harrypotter": 2000,
+    "starwars": 2000,
+    "starwars": 2000,
+    "anime": 2000,
+    "comicbooks": 2000
   },
   "television": {
-    "gameofthrones": 200,
-    "doctorwho": 200,
-    "mylittlepony": 200,
-    "community": 200,
-    "breakingbad": 200,
-    "startrek": 200,
-    "himym": 200,
-    "thewalkingdead": 200
+    "gameofthrones": 2000,
+    "doctorwho": 2000,
+    "mylittlepony": 2000,
+    "community": 2000,
+    "breakingbad": 2000,
+    "startrek": 2000,
+    "himym": 2000,
+    "thewalkingdead": 2000
   },
   "gaming": {
-    "gaming": 200,
-    "leagueoflegends": 200,
-    "pokemon": 200,
-    "minecraft": 200,
-    "starcraft": 200,
-    "dota2": 200,
-    "skyrim": 200,
-    "tf2": 200
+    "gaming": 2000,
+    "leagueoflegends": 2000,
+    "pokemon": 2000,
+    "minecraft": 2000,
+    "starcraft": 2000,
+    "dota2": 2000,
+    "skyrim": 2000,
+    "tf2": 2000
   }
 }

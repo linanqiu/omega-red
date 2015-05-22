@@ -26,6 +26,9 @@
     }
   });
 
+  var threadCount = 0;
+  var commentCount = 0;
+
   var natural = require('natural');
   var tokenizer = new natural.TreebankWordTokenizer();
 
@@ -48,6 +51,10 @@
       entry.text = sanitize(entry.text);
       entry.title = sanitize(entry.title);
       stringifierThreads.write(entry);
+      threadCount++;
+      if(threadCount % 1000 === 0) {
+        console.log('\t\t%d threads', threadCount);
+      }
     },
     writeComment: function (entry) {
       if (entry.text === undefined) {
@@ -55,6 +62,10 @@
       }
       entry.text = sanitize(entry.text);
       stringifierComments.write(entry);
+      commentCount++;
+      if(commentCount % 1000 === 0) {
+        console.log('\t\t%d comments', commentCount);
+      }
     }
   };
 })();
