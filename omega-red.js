@@ -81,6 +81,8 @@
             author(entry, function (err) {
               if (!err) {
                 writer.writeThread(entry);
+              } else {
+                console.error(err);
               }
             });
           });
@@ -129,6 +131,8 @@
           author(entry, function (err) {
             if (!err) {
               writer.writeComment(entry);
+            } else {
+              console.error(err);
             }
           });
 

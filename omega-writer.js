@@ -1,8 +1,14 @@
 (function () {
 
   var fs = require('fs');
-  var threadsFile = fs.createWriteStream('threads.csv');
-  var commentsFile = fs.createWriteStream('comments.csv');
+  // var threadsFile = fs.createWriteStream('threads.csv');
+  // var commentsFile = fs.createWriteStream('comments.csv');
+
+  var threadsFile = 'threads.csv';
+  var commentsFile = 'comments.csv';
+
+  var threadsRows = [];
+  var commentsRows = [];
 
   var stringify = require('csv-stringify');
   var columnsThreads = ['text', 'title', 'url', 'id', 'subreddit', 'meta', 'time', 'author', 'ups', 'downs', 'authorlinkkarma', 'authorcommentkarma', 'authorisgold'];
@@ -12,7 +18,15 @@
   stringifierThreads.on('readable', function () {
     var row = '';
     while (row = stringifierThreads.read()) {
-      threadsFile.write(row);
+      // threadsFile.write(row);
+      if (threadsRows.length < 1000) {
+        threadsRows.push(row);
+      } else {
+        threadsRows.forEach(function (threadsRow) {
+          fs.appendFileSync(threadsFile, threadsRow);
+        });
+        threadsRows = [];
+      }
     }
   });
   var columnsComments = ['text', 'id', 'subreddit', 'meta', 'time', 'author', 'ups', 'downs', 'authorlinkkarma', 'authorcommentkarma', 'authorisgold'];
@@ -22,16 +36,23 @@
   stringifierComments.on('readable', function () {
     var row = '';
     while (row = stringifierComments.read()) {
-      commentsFile.write(row);
+      // commentsFile.write(row);
+      if (commentsRows.length < 1000) {
+        commentsRows.push(row);
+      } else {
+        commentsRows.forEach(function (commentsRow) {
+          fs.appendFileSync(commentsFile, commentsRow);
+        });
+        commentsRows = [];
+      }
     }
   });
-
-  var threadCount = 0;
-  var commentCount = 0;
 
   var natural = require('natural');
   var tokenizer = new natural.TreebankWordTokenizer();
 
+  var threadCount = 0;
+  var commentCount = 0;
 
   function sanitize(text) {
     text = text.toLowerCase();
@@ -52,7 +73,7 @@
       entry.title = sanitize(entry.title);
       stringifierThreads.write(entry);
       threadCount++;
-      if(threadCount % 1000 === 0) {
+      if (threadCount % 1000 === 0) {
         console.log('\t\t%d threads', threadCount);
       }
     },
@@ -63,7 +84,7 @@
       entry.text = sanitize(entry.text);
       stringifierComments.write(entry);
       commentCount++;
-      if(commentCount % 1000 === 0) {
+      if (commentCount % 1000 === 0) {
         console.log('\t\t%d comments', commentCount);
       }
     }

@@ -13,6 +13,7 @@
       entry.authorlinkkarma = authorCache[author].authorlinkkarma;
       entry.authorcommentkarma = authorCache[author].authorcommentkarma;
       entry.authorisgold = authorCache[author].authorisgold;
+      callback(false);
     } else {
       request(BASE_URL.replace('USERNAME', author), function (err, resp, body) {
         if (!err) {
@@ -30,7 +31,7 @@
             callback(false);
           } else {
             // console.error('Author %s caused JSON parsing error', author);
-            callback(true);
+            callback(false);
           }
         }
       });
