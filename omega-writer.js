@@ -22,9 +22,7 @@
       if (threadsRows.length < 1000) {
         threadsRows.push(row);
       } else {
-        threadsRows.forEach(function (threadsRow) {
-          fs.appendFileSync(threadsFile, threadsRow);
-        });
+        fs.appendFileSync(threadsFile, threadsRows.join(''));
         threadsRows = [];
       }
     }
@@ -40,9 +38,7 @@
       if (commentsRows.length < 1000) {
         commentsRows.push(row);
       } else {
-        commentsRows.forEach(function (commentsRow) {
-          fs.appendFileSync(commentsFile, commentsRow);
-        });
+        fs.appendFileSync(commentsFile, commentsRows.join(''));
         commentsRows = [];
       }
     }
